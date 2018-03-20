@@ -23,7 +23,7 @@ import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 
-main_dir = r'/Users/juancarlos/Documents/data/text-treatment/'
+main_dir  = r'/home/alejandro/Documents/thesis/data/'
 users_rel = r'users_rel.txt'
 cates_rel = r'cates_rel.txt'
 pinid_rel = r'names_rel.txt'
@@ -243,6 +243,7 @@ try:
   low_dim_embs = tsne.fit_transform(final_embeddings[:plot_only, :])
   labels = [reverse_dictionary[i] for i in xrange(plot_only)]
   plot_with_labels(low_dim_embs, labels, os.path.join(gettempdir(), 'tsne.png'))
+  print(gettempdir())
 
 except ImportError as ex:
   print('Please install sklearn, matplotlib, and scipy to show embeddings.')
