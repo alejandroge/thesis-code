@@ -5,14 +5,16 @@ Created on Mon Mar  19 22:53:05 2018
 
 @author: Alejandro Guevara
 """
-import os
+from os import chdir
 
 # Paths names
 #data_dir = r'/Users/juancarlos/Documents/data/pinterest_dataset/'
 #pins_dir = r'/Users/juancarlos/Documents/data/pinterest/pinterest/'
-pins_dir = r'/home/alejandro/Documents/thesis/data/pinterest/'
-data_dir = r'/home/alejandro/Documents/thesis/data/pinterest_dataset/'
+pins_dir = r'data/pinterest/'
+data_dir = r'data/pinterest_dataset/'
 pins_routes = r'all_pins_routes.txt'
+
+chdir('..')
 
 # Reads the whole list of pins
 routes_list = []
