@@ -8,7 +8,7 @@ Created on Sun May 13 22:29:24 2018
 from os import chdir
 import re
 from nltk.tokenize.casual import EMOTICON_RE as emo_re
-import emoji
+from emoji import emoji_unicode as emoji
 
 def clean(line,hashs,ats,links):
     for link in links:
@@ -85,6 +85,7 @@ url_re = re.compile(URLS, re.VERBOSE | re.I | re.UNICODE)
 hashtag_re = re.compile('(?:^|\s)[＃#]{1}(\w+)', re.UNICODE)
 #mention_re = re.compile('(?:^|\s)[＠@]{1}([^\s#<>[\]|{}]+)', re.UNICODE) # To include more complete names
 mention_re = re.compile('(?:^|\s)[＠@]{1}(\w+)', re.UNICODE)
+
                         
 with open(pins_text_file,'r') as text_reader, open(words_file,'w', encoding='utf-8') as words_writer, open(emo_file, 'w',encoding='utf-8') as emo_writer, open(hash_file,'w',encoding='utf-8') as hash_writer, open(at_file,'w',encoding='utf-8') as at_writer, open(link_file,'w',encoding='utf-8') as link_writer:
     for line in text_reader:
@@ -94,7 +95,8 @@ with open(pins_text_file,'r') as text_reader, open(words_file,'w', encoding='utf
         links = url_re.findall(line)
         line = clean(line,hashs,ats,links)
         emoticons = emo_re.findall(line)
-        emojis = [w for w in line if w in emoji.emoji_pattern]
+        emojis = emoji.parser.re.findall(emoji.parser.RE_PATTERN_TEMPLATE, line)
+        #emojis = [w for w in line if w in emoji.RE_PATTERN_TEMPLATE]
         words = re.findall('[a-záéíóúñ][a-záéíóúñ_-]+',line) #Revisar para remover ats, hashs y links
         
         words_writer.write(' '.join(w for w in words)+'\n')
