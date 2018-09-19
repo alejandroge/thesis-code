@@ -8,11 +8,8 @@ import re
 import time
 import numpy as np
 from nltk.corpus import stopwords
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import StratifiedKFold
 from sklearn import metrics
-from sklearn import svm
-from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from os import chdir
                 
@@ -56,7 +53,7 @@ def read_labels_from_indexes(file, indexes_list):
     labels = []
     categories = read_file(r"data/pinterest/ss_pins_{}.txt".format(file))
     for idx in indexes_list:
-        labels.append(categories[idx])
+        labels.append(int(categories[idx]))
     return labels
 
 def read_text_from_indexes(indexes_list):
@@ -72,30 +69,29 @@ def read_labels_from_indexes_list(file, indexes_list):
     for l in indexes_list:
         c = []
         for idx in l:
-            c.append(categories[idx])
-        labels.append(list(set(c)))
+            c.append(int(categories[idx]))
+        labels.append(c)
     return labels
 
 def read_text_from_indexes_list(indexes_list):
     texts = []
     pins_text = read_data(r"data/pinterest/pins_eng_words.txt")
     for l in indexes_list:
-        t = ''
+        t = []
         for idx in l:
-            t += ' ' + pins_text[idx]
+            t.append(pins_text[idx])
         texts.append(t)
     return texts
 
-def recall_at(real_labels, predicted_labels, n):
-    scores = []
-    for r_labels, p_labels in zip(real_labels, predicted_labels):
-        top_probs = { x + 1 for x in p_labels.argsort()[-n:][::-1] }
-        r_labels = { int(x) for x in r_labels }
-        r_labels.intersection(top_probs)
-        scores.append(float(len(r_labels.intersection(top_probs)))/float(
-                len(r_labels.union(top_probs))))
-        print(scores)
-    return sum(scores)/float(len(scores))
+def recall_at(r_labels, p_labels):
+    # Real n Predicted / Real U Predicted
+    r_labels = set(r_labels)
+    p_labels = set(p_labels)
+    
+    numerator = float(len(r_labels.intersection(p_labels)))
+    divisor = float(len(r_labels.union(p_labels)))
+    
+    return numerator/divisor
 
 # moves to the main directory
 chdir('..')
@@ -119,6 +115,7 @@ train_indexes = read_simple_indexes_file(data_train_file)
 val_indexes   = read_simple_indexes_file(data_val_file)
 test_indexes  = read_list_indexes_file(data_test_file)
 
+
 # Read training data
 # For svm there is the parameter C to optimize
 corpus_train = read_text_from_indexes(train_indexes)
@@ -139,23 +136,23 @@ labels_val = np.asarray(labels_val)
 
 data_trans_val = vectorizer.transform(corpus_val)
 
-# Use a validation set to find optimal C
+# Use a validation set to find optimal K
 best_acc = 0.0
-best_c = 0
-c_list = {0.1, 1, 10, 100}
-for c in c_list:
-    print('Validating model with C = '+str(c))
-    clf_svm = svm.SVC(C=c, probability=True).fit(data_trans_train, labels_train)
-    predicted_svm = clf_svm.predict_proba(data_trans_val)
-    acc = recall_at(labels_val, predicted_svm, 5)
+best_k = 0
+k_list = [1, 3, 5, 10]
+for k in k_list:
+    print('Validating model with k = '+str(k))
+    clf_knn = KNeighborsClassifier(n_neighbors=k, algorithm = 'brute', metric='cosine').fit(data_trans_train, labels_train)
+    predicted_knn = clf_knn.predict(data_trans_val)
+    acc = np.mean(labels_val == predicted_knn)
     print('\tAccuracy = '+str(acc))
     if (acc>best_acc):
-        best_c = c
+        best_k = k
         best_acc = acc
 print('\n')
-print('Best C for the model = '+str(best_c))
+print('Best k for the model = '+str(best_k))
 
-#############################################################
+##############################################################
 # Load training and validation data together
 corpus_train = read_text_from_indexes(train_indexes) + read_text_from_indexes(val_indexes)
 labels_train = read_labels_from_indexes(
@@ -173,20 +170,20 @@ print("Longitud de corpus {}".format(len(corpus_test)))
 print("Longitud de labels {}".format(len(labels_test)))
 labels_test = np.array(labels_test)
 
-data_trans_test = vectorizer.transform(corpus_test)
+print('Vectorizing test data')
+data_trans_test = [ vectorizer.transform(x) if len(x) > 0 else None for x in corpus_test ]
 
 start = time.time()
-print("Started fitting modelfor C=", best_c)
-clf_svm = svm.SVC(C=best_c, probability=True).fit(data_trans_train, labels_train)
-print('Predictions started for C=', best_c)
-predicted_svm = clf_svm.predict_proba(data_trans_test)
+print('Predicting with K = '+str(best_k))
+clf_knn = KNeighborsClassifier(n_neighbors=best_k, algorithm = 'brute', metric='cosine').fit(data_trans_train, labels_train)
+scores = []
+for labels_,data_ in zip(labels_test, data_trans_test):
+    if data_ != None:
+        predicted_knn = clf_knn.predict(data_trans_test)
+        scores.append(recall_at(np.array(labels_), predicted_knn))
 stop = time.time()
 
 print('\n\n')
 print('\nPerformance:')
-print(recall_at(labels_test, predicted_svm, 5))
-print('\n\n\n')
-print('Training + test time = '+str(stop - start))
-
-# metrics.recall_at
-# R n P / R U P
+print(sum(scores)/float(len(scores)))
+print('\nTraining + test time = '+str(stop - start))
