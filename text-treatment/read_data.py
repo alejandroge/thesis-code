@@ -17,7 +17,6 @@ import math
 import os
 import random
 from tempfile import gettempdir
-import pdb
 
 import numpy as np
 from six.moves import xrange  # pylint: disable=redefined-builtin

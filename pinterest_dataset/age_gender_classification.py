@@ -7,10 +7,10 @@ Created on Fri Jan 19 11:21:51 2018
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import normalize
 from sklearn import svm
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import StratifiedKFold
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.ensemble import RandomForestClassifier
 from nltk.corpus import stopwords
