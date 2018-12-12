@@ -94,8 +94,8 @@ def recall_at(r_labels, p_labels):
 
 # moves to the main directory
 chdir('..')
-data_dir = r'data/pinterest/'
-sorted_dir = r'data/pinterest/sorted/'
+data_dir = r'data/data/'
+sorted_dir = r'data/data/sorted/'
 
 # In
 data_train_file = sorted_dir+'train_indexes_.txt'
@@ -138,7 +138,7 @@ data_trans_val = vectorizer.transform(corpus_val)
 # Use a validation set to find optimal C
 best_acc = 0.0
 best_c = 0
-c_list = {30, 50, 10, 100}
+c_list = {10, 30, 50, 100}
 for c in c_list:
     print('Validating model with C = '+str(c))
     clf_rf = RandomForestClassifier(n_estimators=c).fit(data_trans_train, labels_train)

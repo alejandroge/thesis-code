@@ -94,8 +94,8 @@ def recall_at(r_labels, p_labels):
 
 # moves to the main directory
 chdir('..')
-data_dir = r'data/pinterest/'
-sorted_dir = r'data/pinterest/sorted/'
+data_dir = r'data/data/'
+sorted_dir = r'data/data/sorted/'
 
 # In
 data_train_file = sorted_dir+'train_indexes_.txt'

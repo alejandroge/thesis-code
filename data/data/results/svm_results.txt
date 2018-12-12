@@ -1,0 +1,29 @@
+Longitud de corpus 183701
+Longitud de labels 183701
+Longitud de corpus 61454
+Longitud de labels 61454
+Validating model with C = 0.1
+        Accuracy = 0.47734891138087027
+Validating model with C = 1
+        Accuracy = 0.46693461776287953
+Validating model with C = 10
+        Accuracy = 0.44441370781397466
+Validating model with C = 100
+        Accuracy = 0.4253425326260292
+
+
+Best C for the model = 0.1
+Longitud de corpus 245155
+Longitud de labels 245155
+Longitud de corpus 274
+Longitud de labels 274
+Vectorizing test data
+Predicting with C = 0.1
+
+
+
+
+Performance:
+0.3060056670023514
+
+Training + test time = 29.91502356529236

@@ -17,15 +17,14 @@ def count_words(dictionary, words):
     
 
 chdir('..')
-data_dir = r'data/pinterest/'
+data_dir = r'data/data/'
 
 # In
-lang = 'eng'
-words_file = data_dir+'pins_'+lang+'_words.txt'
-emo_file   = data_dir+'pins_'+lang+'_emoticons.txt'
-hash_file  = data_dir+'pins_'+lang+'_hashtags.txt'
-at_file    = data_dir+'pins_'+lang+'_ats.txt'
-link_file  = data_dir+'pins_'+lang+'_links.txt'
+words_file = data_dir+'pins_words.txt'
+emo_file   = data_dir+'pins_emoticons.txt'
+hash_file  = data_dir+'pins_hashtags.txt'
+at_file    = data_dir+'pins_ats.txt'
+link_file  = data_dir+'pins_links.txt'
 
 # Out
 vocab_file = data_dir+'ss_pins_vocab.txt'

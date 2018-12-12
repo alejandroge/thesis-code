@@ -1,0 +1,29 @@
+Longitud de corpus 183701
+Longitud de labels 183701
+Longitud de corpus 61454
+Longitud de labels 61454
+Validating model with alpha = 0.1
+        Accuracy = 0.45072737331988155
+Validating model with alpha = 1
+        Accuracy = 0.41430989032447035
+Validating model with alpha = 10
+        Accuracy = 0.3217528557945781
+Validating model with alpha = 100
+        Accuracy = 0.22955381260780422
+
+
+Best alpha for the model = 0.1
+Longitud de corpus 245155
+Longitud de labels 245155
+Longitud de corpus 274
+Longitud de labels 274
+Vectorizing test data
+Predicting with alpha = 0.1
+
+
+
+
+Performance:
+0.31469733846344555
+
+Training + test time = 1.6705269813537598

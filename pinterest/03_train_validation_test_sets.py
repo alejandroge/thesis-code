@@ -24,13 +24,13 @@ def append_to_dic(dictionary, id, els):
             dictionary[id] = [e]
 
 def write_train_files(prefix, dic):
-    with open(prefix+'.txt', "w+") as f:
+    with open(prefix+'.txt', "w") as f:
         for id in dic.keys():
             for e in dic[id]:
                 f.write(str(e[0])+"\n")
             
 def write_test_files(prefix, dic):
-    with open(prefix+'.txt', "w+") as f:
+    with open(prefix+'.txt', "w") as f:
         for user_id in range(274):
             if user_id in dic:
                 for e in dic[user_id]:
@@ -38,14 +38,14 @@ def write_test_files(prefix, dic):
             f.write("\n")
 
 chdir('..')
-data_dir = r'data/pinterest/'
-sorted_dir = r'data/pinterest/sorted/'
+data_dir = r'data/data/'
+sorted_dir = r'data/data/sorted/'
 
 # in
-categories_file = data_dir+'ss_pins_categories.txt'
-users_file = data_dir+'ss_pins_users.txt'
+categories_file = data_dir+'all_dataset3_categories.txt'
+users_file = data_dir+'all_dataset3_users.txt'
 # out
-indexes_file = data_dir+'ss_sorted_by_cat_indexes.txt'
+indexes_file = data_dir+'all_dataset3_sorted_by_cat_indexes.txt'
 
 # reads users and cats files and enumerates it
 users_list = list(enumerate(zip(read_file(users_file),
